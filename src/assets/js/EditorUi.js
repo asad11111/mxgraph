@@ -4,6 +4,8 @@
 /**
  * Constructs a new graph editor
  */
+
+
 EditorUi = function(editor, container, lightbox)
 {
 	mxEventSource.call(this);
@@ -13,6 +15,7 @@ EditorUi = function(editor, container, lightbox)
 	this.container = container || document.body;
 	var graph = this.editor.graph;
 	graph.lightbox = lightbox;
+
 
 	// Pre-fetches submenu image or replaces with embedded image if supported
 	if (mxClient.IS_SVG)
@@ -3212,6 +3215,20 @@ EditorUi.prototype.isCompatibleString = function(data)
  data:any={};
 EditorUi.prototype.saveFile = function(forceDialog,EditorUi)
 {
+
+	var http = new XMLHttpRequest();
+var url = 'http://localhost:3000/data';
+var params = this.data;
+http.open('POST', url, true);
+
+http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+http.onreadystatechange = function() {//Call a function when the state changes.
+    if(http.readyState == 4 && http.status == 200) {
+        alert(http.responseText);
+    }
+}
+
 	if (!forceDialog && this.editor.filename != null)
 	{
 		this.save(this.editor.getOrCreateFilename());
@@ -3227,8 +3244,12 @@ EditorUi.prototype.saveFile = function(forceDialog,EditorUi)
 
 			if(this.save)
 			{
+				
+				//http.send(params);
+			
 				//console.log(textarea.value = mxUtils.getPrettyXml(this.editor.getGraphXml()), "xml");	
 				this.data=textarea.value = mxUtils.getPrettyXml(this.editor.getGraphXml()), "xml";
+				http.send(this.data);
 				console.log("yahan se", this.data,"ye data");
 
 			}
